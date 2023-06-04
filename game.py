@@ -59,11 +59,11 @@ class Block(pygame.sprite.Sprite):
         self.color = color 
         self.width = width 
         self.height = height
-        self.rect = Rect(self.x,self.y,self.width,self.height)
+        self.rect = Rect(self.x,self.y-.5*self.height,self.width,self.height)
         Blocks.add(self)        
 
     def draw(self):
-        pygame.draw.rect(screen,self.color,(self.x,self.y,self.width,self.height))
+        pygame.draw.rect(screen,self.color,self.rect)
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self,x,y,color,x_speed,y_speed,size):
@@ -85,6 +85,7 @@ class Ball(pygame.sprite.Sprite):
             for block in Blocks:
                 if self.rect.colliderect(block.rect):            
                     block.kill()
+                    Blocks.remove(block)                    
                     return True            
         return False
             
@@ -103,25 +104,24 @@ class Ball(pygame.sprite.Sprite):
                 self.y_speed *=-1            
         else:
             # TODO check where collision happened on the ball relative to the rectangle and change speeds
-            self.y_speed *=-1
+            self.y_speed *=-1        
+        
 
-        self.rect = Rect(self.x,self.y,self.size,self.size) 
+        self.rect= Rect(self.x,(self.y-.5*self.size),self.size,self.size)       
         self.draw()
 
-bl = Block(200,150,RED,50,10)
-b = Ball(200,200,BLUE,1,-1,15)
+bl = Block(200,150,RED,50,20)
+b2 = Block(350,300,GREEN, 50,20)
+b = Ball(200,200,BLUE,3,-3,15)
 m= Mover()
-while True:
-    
+while True:    
     clock.tick(FPS)
-    screen.fill(WHITE)
-    
+    screen.fill(WHITE)    
     draw_blocks()
     m.update()
     b.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
-          
+            sys.exit()          
     pygame.display.flip()
            
