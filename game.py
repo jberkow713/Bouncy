@@ -83,7 +83,11 @@ class Ball(pygame.sprite.Sprite):
         # check collisions with rectangles, if collision, return True, else return False
         if Blocks:
             for block in Blocks:
-                if self.rect.colliderect(block.rect):            
+                if self.rect.colliderect(block.rect):
+                    if abs(self.rect.x+self.size) / block.rect.x <1.02:
+                        self.x_speed*=-1                                                                       
+                    else:
+                        self.y_speed*=-1            
                     block.kill()
                     Blocks.remove(block)                    
                     return True            
@@ -102,16 +106,13 @@ class Ball(pygame.sprite.Sprite):
                 self.y = self.new_y
             else:
                 self.y_speed *=-1            
-        else:
-            # TODO check where collision happened on the ball relative to the rectangle and change speeds
-            self.y_speed *=-1        
         
 
         self.rect= Rect(self.x,(self.y-.5*self.size),self.size,self.size)       
         self.draw()
 
 bl = Block(200,150,RED,50,20)
-b2 = Block(350,300,GREEN, 50,20)
+b2 = Block(355,300,GREEN, 50,20)
 b = Ball(200,200,BLUE,3,-3,15)
 m= Mover()
 while True:    
